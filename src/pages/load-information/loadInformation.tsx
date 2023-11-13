@@ -156,6 +156,27 @@ function LoadInformationPage() {
     formAgreement: false,
   };
 
+  
+  const dummyJWT = '0100100474';
+
+        
+  //Supuestamente esto es circuito?
+  const distritos = dummyJWT.substring(0, 2);
+  console.log(distritos)
+
+  // B) 3 municipio (posiciones 2, 3, 4)
+  const municipios = dummyJWT.substring(2, 5);
+  console.log(municipios)
+
+  // C) 5 mesa (posiciones 5, 6, 7, 8, 9)
+
+  // //Se carga 5 ult caracteres 
+  // const mesas = dummyJWT.substring(5, 10);
+  // console.log(mesas)
+
+  console.log("Distrito:", distritos);
+  console.log("Municipio:", municipios);
+
   const isTableDataValid = (
     touched: FormikTouched<TelegramData>,
     errors: FormikErrors<TelegramData>,
@@ -224,8 +245,7 @@ function LoadInformationPage() {
         );
 
         payload.append('imagenActa', file || '');
-        console.log('Valor de endpoint:', endpoint);
-        console.log(import.meta.env)
+
 
         // Hago post al endpoint de actas de la API 
         const response = await axios.post(
@@ -298,7 +318,7 @@ function LoadInformationPage() {
                   label="Circuito"
                   name="circuit"
                   variant="outlined"
-                  value={values.circuit}
+                  value={distritos}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   type="text"

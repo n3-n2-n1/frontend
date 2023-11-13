@@ -37,6 +37,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [mesas, setMesas] = useState([]);
 
+  //this must not be here...
   const getMesasFromToken = async (user: User) => {
     const idToken = await user.getIdToken();
 
