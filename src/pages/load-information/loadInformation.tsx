@@ -27,6 +27,8 @@ import { TelegramData } from './types';
 import axios from 'axios';
 import { useAuth } from '#/context/AuthContext';
 
+import imageCompression from 'browser-image-compression';
+
 const validationSchema = Yup.object().shape({
   circuit: Yup.string().required('Debe ingresar un circuito'),
   table: Yup.string().required('Debe ingresar una mesa'),
@@ -252,8 +254,12 @@ function LoadInformationPage() {
             .toString() || '',
         );
 
-        payload.append('imagenActa', file || '');
-     
+        if (file) {
+          const compressedFile = await handleImageUpload(file);
+          payload.append('imagenActa', compressedFile || '');
+        } else {
+          throw new Error('No se proporcionó ningún archivo.');
+        }
 
         // Hago post al endpoint de actas de la API
         const response = await axios.post(`${endpoint}/actas`, payload, {
@@ -291,6 +297,21 @@ function LoadInformationPage() {
     errors = {};
     setIsDialogOpen(false);
     onSubmitForm(values, errors, comesFromReport);
+  };
+
+  // Función para compresión de imágenes
+  const handleImageUpload = async (imageFile: File) => {
+    const options = {
+      maxSizeMB: 5,
+      useWebWorker: true,
+    };
+
+    try {
+      const compressedFile = await imageCompression(imageFile, options);
+      return compressedFile;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -373,7 +394,7 @@ function LoadInformationPage() {
                   label="Nro de electores"
                   name="electors"
                   variant="outlined"
-                  placeholder="0"
+                  // placeholder="0"
                   type="number"
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -385,7 +406,7 @@ function LoadInformationPage() {
                   label="Sobres"
                   name="envelopes"
                   variant="outlined"
-                  placeholder="0"
+                  // placeholder="0"
                   type="number"
                   onChange={handleChange}
                   onBlur={handleBlur}
