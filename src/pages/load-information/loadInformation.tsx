@@ -253,7 +253,7 @@ function LoadInformationPage() {
         );
 
         payload.append('imagenActa', file || '');
-
+     
 
         // Hago post al endpoint de actas de la API
         const response = await axios.post(`${endpoint}/actas`, payload, {
@@ -262,6 +262,7 @@ function LoadInformationPage() {
             Authorization: userToken,
           },
         });
+
 
         if (response.status !== 201) {
           setIsSubmitting(false);
